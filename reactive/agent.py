@@ -1,54 +1,83 @@
 import sys
 import os
 
-# Allow importing from the shared/ folder at the project root
+# Allow importing from shared/
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+from shared.tools import (
+    pause_campaign,
+    refresh_creative,
+    decrease_budget,
+    change_audience,
+    escalate_to_manager,
+    continue_campaign,
+)
+
 from shared.test_cases import TEST_CASES
 
 
 def evaluate_campaign(campaign: dict) -> dict:
     """
-    Takes today's campaign data and returns a fixed decision
-    based on hard-coded rules. No memory, no reasoning.
+    Reactive Agent
+
+    Uses fixed if/else rules only.
+    No LLM.
+    No reasoning.
     """
+
     ctr = campaign["ctr"]
-    conversions = campaign["conversions"]
-    daily_spend = campaign["spend_daily"]
-    budget_remaining = campaign["remaining_budget"]
+    conversion_rate = campaign["conversion_rate"]
+    roas = campaign["roas"]
+    audience_fatigue = campaign["audience_fatigue"]
+    remaining_budget = campaign["remaining_budget"]
 
-    # Rule 1: No conversions + spending a lot → pause immediately
-    if conversions == 0 and daily_spend > 200:
-        return {
-            "action": "PAUSE_CAMPAIGN",
-            "reason": "No conversions despite significant daily spend."
-        }
+    # Priority 1
+    if conversion_rate == 0 and roas < 1:
+        return pause_campaign(campaign)
 
-    # Rule 2: Weak click-through rate → reduce budget
-    if ctr < 0.5:
-        return {
-            "action": "REDUCE_BUDGET",
-            "reason": f"CTR is low ({ctr}%), reducing daily budget by 20%."
-        }
+    # Priority 2
+    if audience_fatigue == "High":
+        return change_audience(campaign)
 
-    # Rule 3: Budget almost exhausted → escalate to manager
-    if budget_remaining < 100:
-        return {
-            "action": "ESCALATE_TO_MANAGER",
-            "reason": f"Only {budget_remaining} left in budget."
-        }
+    # Priority 3
+    if ctr < 1.0:
+        return refresh_creative(campaign)
 
-    # Default: everything looks fine
-    return {
-        "action": "KEEP_RUNNING",
-        "reason": "Campaign performance is within acceptable range."
-    }
+    # Priority 4
+    if roas < 1.5:
+        return decrease_budget(campaign)
+
+    # Priority 5
+    if remaining_budget < 100:
+        return escalate_to_manager(campaign)
+
+    # Otherwise
+    return continue_campaign(campaign)
 
 
-# ---- Run against the shared test cases ----
-if __name__ == "__main__":
-    for campaign in TEST_CASES:
+def main():
+
+    print("=" * 70)
+    print("Reactive Marketing Agent")
+    print("=" * 70)
+
+    for i, campaign in enumerate(TEST_CASES, start=1):
+
         result = evaluate_campaign(campaign)
-        print(f"Campaign: {campaign['id_campaign']}")
-        print(f"  Decision: {result['action']}")
-        print(f"  Reason:   {result['reason']}")
-        print()
+
+        print(f"\nCampaign {i}")
+        print("-" * 40)
+
+        print("Input:")
+        for k, v in campaign.items():
+            print(f"  {k}: {v}")
+
+        print("\nDecision:")
+        print(f"  Action : {result['action']}")
+        print(f"  Reason : {result['reason']}")
+
+        print("-" * 40)
+
+
+if __name__ == "__main__":
+    main()

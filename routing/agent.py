@@ -3,27 +3,39 @@ import os
 import google.generativeai as genai
 from dotenv import load_dotenv
 
-# Allow importing from the shared/ folder at the project root
+# Allow importing from shared/
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+from shared.tools import (
+    pause_campaign,
+    refresh_creative,
+    decrease_budget,
+    change_audience,
+    escalate_to_manager,
+    continue_campaign,
+)
 from shared.test_cases import TEST_CASES
 
-# Load the API key from the .env file in the project root
 load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 model = genai.GenerativeModel("gemini-flash-latest")
 
-ALLOWED_LABELS = {"HEALTHY", "NEEDS_ADJUSTMENT", "CRITICAL"}
+ALLOWED_LABELS = {
+    "PAUSE",
+    "CHANGE_AUDIENCE",
+    "REFRESH_CREATIVE",
+    "DECREASE_BUDGET",
+    "ESCALATE",
+    "CONTINUE",
+}
 
 
 def classify_campaign(campaign: dict) -> str:
-    """
-    Sends campaign data to the model and asks for ONE label only.
-    Returns one of: HEALTHY, NEEDS_ADJUSTMENT, CRITICAL
-    """
-    prompt = f"""You are classifying an ad campaign's health.
-Respond with ONLY one word, no punctuation, no explanation.
-Choose exactly one label from this set: HEALTHY, NEEDS_ADJUSTMENT, CRITICAL
+    prompt = f"""You are classifying an ad campaign's health and recommended action.
+Respond with ONLY one label, no punctuation, no explanation.
+Choose exactly one label from this set:
+PAUSE, CHANGE_AUDIENCE, REFRESH_CREATIVE, DECREASE_BUDGET, ESCALATE, CONTINUE
 
 Campaign data:
 - daily_spend: {campaign['spend_daily']}
@@ -31,41 +43,65 @@ Campaign data:
 - clicks: {campaign['clicks']}
 - impressions: {campaign['impressions']}
 - conversions: {campaign['conversions']}
+- conversion_rate: {campaign['conversion_rate']}%
 - ctr: {campaign['ctr']}%
 - cost_per_conversion: {campaign['cost_per_conversion']}
+- roas: {campaign['roas']}
+- audience_fatigue: {campaign['audience_fatigue']}
 
 Label:"""
 
     response = model.generate_content(prompt)
     label = response.text.strip().upper()
 
-    # Safety check: if the model returns something unexpected, fail safely
     if label not in ALLOWED_LABELS:
-        return "CRITICAL"  # fail safe: escalate rather than guess
+        return "ESCALATE"
 
     return label
 
 
 def run_workflow(campaign: dict) -> dict:
-    """
-    Ordinary, testable code. No model call here — just fixed logic
-    based on the label the classifier returned.
-    """
     label = classify_campaign(campaign)
 
-    if label == "HEALTHY":
-        return {"action": "KEEP_RUNNING", "label": label}
-    elif label == "NEEDS_ADJUSTMENT":
-        return {"action": "REDUCE_BUDGET", "label": label}
-    else:  # CRITICAL
-        return {"action": "PAUSE_CAMPAIGN", "label": label}
+    if label == "PAUSE":
+        result = pause_campaign(campaign)
+    elif label == "CHANGE_AUDIENCE":
+        result = change_audience(campaign)
+    elif label == "REFRESH_CREATIVE":
+        result = refresh_creative(campaign)
+    elif label == "DECREASE_BUDGET":
+        result = decrease_budget(campaign)
+    elif label == "ESCALATE":
+        result = escalate_to_manager(campaign)
+    else:
+        result = continue_campaign(campaign)
+
+    result["label"] = label
+    return result
 
 
-# ---- Run against the shared test cases ----
-if __name__ == "__main__":
-    for campaign in TEST_CASES:
+def main():
+    print("=" * 70)
+    print("Deterministic Routing Marketing Agent")
+    print("=" * 70)
+
+    for i, campaign in enumerate(TEST_CASES, start=1):
         result = run_workflow(campaign)
-        print(f"Campaign: {campaign['id_campaign']}")
-        print(f"  Model label: {result['label']}")
-        print(f"  Decision:    {result['action']}")
-        print()
+
+        print(f"\nCampaign {i}")
+        print("-" * 40)
+
+        print("Input:")
+        for k, v in campaign.items():
+            print(f"  {k}: {v}")
+
+        print("\nDecision:")
+        print(f"  Model label : {result['label']}")
+        print(f"  Action      : {result['action']}")
+        print(f"  Reason      : {result['reason']}")
+
+        print("-" * 40)
+
+
+if __name__ == "__main__":
+    main()
