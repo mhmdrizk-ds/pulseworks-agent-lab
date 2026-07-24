@@ -3,7 +3,7 @@ Fixed list of test inputs used identically by all four agents,
 so the comparison table is a fair, apples-to-apples comparison.
 """
 
-from shared.mock_data import CAMPAIGNS
+from shared.data import CAMPAIGNS
 
 # Index reference for the five scenarios:
 # CAMPAIGNS[2] (camp_104) -> clearly healthy, all agents should agree: continue
