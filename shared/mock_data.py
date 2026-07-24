@@ -4,7 +4,6 @@ Everyone imports from this file — do not duplicate campaign data
 inside individual agent folders.
 """
 
-# Today's campaign reports — available to ALL architectures
 CAMPAIGNS = [
     {
         "id_campaign": "camp_101",
@@ -16,6 +15,9 @@ CAMPAIGNS = [
         "conversions": 0,
         "ctr": 0.8,
         "cost_per_conversion": 0,
+        "conversion_rate": 0.0,
+        "roas": 0.4,
+        "audience_fatigue": "Low",
     },
     {
         "id_campaign": "camp_102",
@@ -27,6 +29,9 @@ CAMPAIGNS = [
         "conversions": 5,
         "ctr": 0.3,
         "cost_per_conversion": 30,
+        "conversion_rate": 8.3,
+        "roas": 1.2,
+        "audience_fatigue": "Medium",
     },
     {
         "id_campaign": "camp_104",
@@ -38,6 +43,9 @@ CAMPAIGNS = [
         "conversions": 15,
         "ctr": 3.0,
         "cost_per_conversion": 6.6,
+        "conversion_rate": 5.0,
+        "roas": 3.5,
+        "audience_fatigue": "Low",
     },
     {
         "id_campaign": "camp_105",
@@ -49,6 +57,9 @@ CAMPAIGNS = [
         "conversions": 2,
         "ctr": 2.5,
         "cost_per_conversion": 200,
+        "conversion_rate": 0.4,
+        "roas": 0.9,
+        "audience_fatigue": "Low",
     },
     {
         "id_campaign": "camp_106",
@@ -60,17 +71,17 @@ CAMPAIGNS = [
         "conversions": 12,
         "ctr": 2.2,
         "cost_per_conversion": 10,
+        "conversion_rate": 3.0,
+        "roas": 2.0,
+        "audience_fatigue": "High",
     },
 ]
 
-# Hidden history data — NOT part of the daily report.
-# Only accessible through get_campaign_history() as a "tool".
 _HISTORY = {
     "camp_101": {"days_underperforming": 1, "trend": "declining"},
     "camp_102": {"days_underperforming": 2, "trend": "declining"},
     "camp_104": {"days_underperforming": 0, "trend": "improving"},
     "camp_105": {"days_underperforming": 1, "trend": "stable"},
-    # camp_106 looks healthy today, but has been quietly declining for days
     "camp_106": {"days_underperforming": 4, "trend": "declining"},
 }
 
