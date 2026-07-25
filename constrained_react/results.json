@@ -1,0 +1,45 @@
+[
+  {
+    "campaign_id": "camp_107",
+    "steps": [
+      {
+        "type": "step",
+        "thought": "The campaign metrics are strong (ROAS 3.2, conversion rate 4.0%) and audience fatigue is low. I want to check the campaign history to see if this performance is consistent before deciding to scale the budget.",
+        "action": "get_campaign_history"
+      },
+      {
+        "type": "tool_call",
+        "tool": "get_campaign_history",
+        "result": {
+          "days_underperforming": 8,
+          "trend": "Strongly Declining"
+        }
+      },
+      {
+        "type": "step",
+        "thought": "While today's metrics look decent, the campaign history shows 8 days of underperformance and a strongly declining trend. This contradiction between current snapshot 'Good' ratings and a sustained downward trend makes the situation ambiguous. I will escalate this to the account manager for a strategic review.",
+        "action": "escalate_to_manager"
+      },
+      {
+        "type": "tool_call",
+        "tool": "escalate_to_manager",
+        "result": {
+          "action": "ESCALATE_TO_MANAGER",
+          "reason": "Remaining budget is critically low."
+        }
+      },
+      {
+        "type": "step",
+        "thought": "I have escalated the campaign to the account manager due to the conflicting data between the current snapshot and the 8-day declining trend, and the manager's feedback has confirmed that the remaining budget is critically low. No further action is required from my side as the situation is now in the manager's hands.",
+        "action": "final_answer"
+      },
+      {
+        "type": "final_answer",
+        "text": "Escalate to the account manager for review due to a sustained declining trend and critically low remaining budget."
+      }
+    ],
+    "model_calls": 3,
+    "final_action": "Escalate to the account manager for review due to a sustained declining trend and critically low remaining budget.",
+    "forced_escalation": false
+  }
+]
