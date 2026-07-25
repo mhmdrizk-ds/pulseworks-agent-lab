@@ -179,8 +179,7 @@ if __name__ == "__main__":
     all_results = []
     results_path = "constrained_react/results.json"
 
-    # for campaign in CAMPAIGNS:
-    for campaign in [CAMPAIGNS[6]]:
+    for campaign in CAMPAIGNS:
         try:
             result = run_constrained_agent(campaign, call_model)
         except RuntimeError as e:
