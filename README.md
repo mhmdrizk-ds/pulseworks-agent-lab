@@ -38,7 +38,7 @@ architectures are expected to diverge.
 |---|---|---|
 | `reactive/` | Rule-based if/then logic, no model call | ✅ Done |
 | `routing/` | Single constrained model call classifies into a fixed label, then fixed code acts on it | ✅ Done |
-| `unconstrained_react/` | Free-form ReAct loop — model chooses its own tools and stopping point | 🚧 Loop built, testing across all 10 campaigns |
+| `unconstrained_react/` | Free-form ReAct loop — model chooses its own tools and stopping point | ✅ Done |
 | `constrained_react/` | Same reasoning loop, but schema-validated steps, a tool allow-list, and a MAX_STEPS budget | ⬜ Not started |
 
 All four agents are evaluated against the same 10 test campaigns in
