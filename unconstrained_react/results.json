@@ -1,0 +1,106 @@
+[
+    {
+        "campaign_id": "camp_101",
+        "final_action": "increase_budget",
+        "model_calls": 2,
+        "hit_safety_ceiling": false,
+        "steps": [
+            {
+                "type": "tool_call",
+                "tool": "get_campaign_history"
+            },
+            {
+                "type": "final_answer",
+                "text": "The campaign is performing exceptionally well with a high ROAS of 4.5, strong co... [TRUNCATED - reconstructed from terminal output, not full text]"
+            }
+        ]
+    },
+    {
+        "campaign_id": "camp_102",
+        "final_action": "change_audience",
+        "model_calls": 4,
+        "hit_safety_ceiling": false,
+        "steps": [
+            {
+                "type": "tool_call",
+                "tool": "get_campaign_history"
+            },
+            {
+                "type": "tool_call",
+                "tool": "check_creative_performance"
+            },
+            {
+                "type": "tool_call",
+                "tool": "check_audience_fatigue"
+            },
+            {
+                "type": "final_answer",
+                "text": "The campaign has a strong ROAS and conversion rate, but the very low CTR (0.6%) ... [TRUNCATED - reconstructed from terminal output, not full text]"
+            }
+        ]
+    },
+    {
+        "campaign_id": "camp_103",
+        "final_action": "change_audience",
+        "model_calls": 2,
+        "hit_safety_ceiling": false,
+        "steps": [
+            {
+                "type": "tool_call",
+                "tool": "get_campaign_history"
+            },
+            {
+                "type": "final_answer",
+                "text": "The campaign has been underperforming for four days with a declining trend, and ... [TRUNCATED - reconstructed from terminal output, not full text]"
+            }
+        ]
+    },
+    {
+        "campaign_id": "camp_104",
+        "final_action": "change_audience",
+        "model_calls": 2,
+        "hit_safety_ceiling": false,
+        "steps": [
+            {
+                "type": "tool_call",
+                "tool": "get_campaign_history"
+            },
+            {
+                "type": "final_answer",
+                "text": "The creative performance for this StyleHub campaign is currently \"Good,\" and the... [TRUNCATED - reconstructed from terminal output, not full text]"
+            }
+        ]
+    },
+    {
+        "campaign_id": "camp_105",
+        "final_action": "refresh_creative",
+        "model_calls": 2,
+        "hit_safety_ceiling": false,
+        "steps": [
+            {
+                "type": "tool_call",
+                "tool": "get_campaign_history"
+            },
+            {
+                "type": "final_answer",
+                "text": "The campaign has been underperforming for three days and shows a declining trend... [TRUNCATED - reconstructed from terminal output, not full text]"
+            }
+        ]
+    },
+    {
+        "campaign_id": "camp_106",
+        "final_action": "escalate_to_manager",
+        "model_calls": 2,
+        "hit_safety_ceiling": false,
+        "steps": [
+            {
+                "type": "tool_call",
+                "tool": "get_campaign_history"
+            },
+            {
+                "type": "final_answer",
+                "text": "The campaign is performing well with a ROAS of 2.7, a stable trend, good creativ... [TRUNCATED - reconstructed from terminal output, not full text]"
+            }
+        ]
+    }
+]
